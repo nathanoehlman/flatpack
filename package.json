@@ -1,0 +1,33 @@
+{
+    "name": "flatpack",
+    "description": "Simple mapping library for CouchDB",
+    "author": "Nathan Oehlman <nathan.oehlman@sidelab.com>",
+    "tags": ["flatpack", "sidelab", "couch", "db"],
+    "version": "0.0.1",
+    
+    "main": "flatpack.js",
+    "engines": { "node": ">= 0.4.x < 0.7.0" },
+        
+    "dependencies": {
+		"async": "0.1.x",
+		"config": "0.4.x",
+		"debug": "*",
+		"supercomfy": "*",
+		"underscore": "1.2.x"
+    },
+    
+    "devDependencies": {
+		"chai": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/sidelab/flatpack.git"
+    },
+    
+    "bugs": {
+        "url": "http://github.com/steelmesh/flatpack/issues"
+    },
+    
+    "contributors": [
+    ]
+}
