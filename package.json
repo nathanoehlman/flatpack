@@ -13,7 +13,8 @@
 		"config": "0.4.x",
 		"debug": "*",
 		"supercomfy": "*",
-		"underscore": "1.2.x"
+		"underscore": "1.2.x",
+		"underscore.string": "2.0.0"
     },
     
     "devDependencies": {

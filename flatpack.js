@@ -31,7 +31,7 @@ exports.define = function(couchurl, db, model, options, callback) {
                 // Create the accessor, with args as params
             } else {
                 // Create the accessor
-                accessor[viewName] = function(id, done) {
+                accessor['find' + viewName] = function(id, done) {
                     var db = this._getDB();
                     db.get(designName + '/view/' + dbView, {key:id}, done);
                 };
