@@ -92,9 +92,6 @@ Accessorizer.prototype = {
         
         // Save the document
         function saveDocument(data, callback) {
-            console.log(id);
-            console.log(data);
-            console.log(callback);
             // Create a document for the client in the clients database
             db.put(id, data, function(err) {
                 if (err) return callback(err);

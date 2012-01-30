@@ -36,7 +36,6 @@ describe('defining a flatpack model definition', function() {
             if (err) return done(err);
             customerdb.get(id, function(err, object) {
                 if (err) return done(err);
-                console.log(object);
                 expect(object.firstName).to.equal('Nathan');
                 return done();
             });
