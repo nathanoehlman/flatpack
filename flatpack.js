@@ -12,19 +12,19 @@ var models = {},
   that do not exists, and create a model helper which
   exposes those methods for easy use.
  **/
-exports.define = function(couchurl, db, model, options, callback) {
+exports.define = function(couchAdminUrl, db, model, options, callback) {
 
     if (!model || model.length == 0) return callback("Error: Invalid model name");
     
     // Get the views
     var modelViews = {byType: []},
-        accessor = new Accessorizer(model, couchurl, db);
+        accessor = new Accessorizer(model, (options && options.couchUrl) ? options.couchUrl : couchAdminUrl, db);
         
     _.extend(modelViews, (options && options.views) ? options.views : {});
     
     // Create a view
     function createView(viewName, attributes, callback) {
-        views.createIfNotExists(couchurl, db, model, attributes, null, function(err, designName, dbView) {
+        views.createIfNotExists(couchAdminUrl, db, model, attributes, null, function(err, designName, dbView) {
             if (err) return callback(err)
             
             if (attributes && attributes.length > 0) {
