@@ -27,7 +27,7 @@ describe('defining a flatpack model definition', function() {
         });
     });
 
-    it('should be able to save an object using a defined object and can retrieve by id', function(done) {
+    it('should be able to save an object using a defined object and can retrieve by id, delete, and not retrieve', function(done) {
         
         var customer = {firstName: 'Nathan', lastName: 'Oehlman', company: 'Sidelab'},
             customerdb = flatpack.use('customer');
@@ -37,7 +37,15 @@ describe('defining a flatpack model definition', function() {
             customerdb.get(id, function(err, object) {
                 if (err) return done(err);
                 expect(object.firstName).to.equal('Nathan');
-                return done();
+				
+				// Try deleting
+				customerdb.delete(object, function(err) {
+					if (err) return done(err);
+					customerdb.get(id, function(err, object) {
+						if (err) return done();
+						return done('Object still exists');
+					});
+				});
             });
         });
     });

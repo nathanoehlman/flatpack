@@ -117,7 +117,10 @@ Accessorizer.prototype = {
       Deletes an instance of the object
      **/
     delete: function(object, callback) {
-        
+        if (!object) return callback();
+		var db = this._getDB();
+		// Delete the object using the revision of the current doc
+		db.del(object._id, {rev:object._rev}, callback);
     },
     
     /**
