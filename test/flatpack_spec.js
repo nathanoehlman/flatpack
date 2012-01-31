@@ -56,23 +56,34 @@ describe('defining a flatpack model definition', function() {
 		var customers = [{firstName: 'Nathan', lastName: 'Oehlman', company: 'Sidelab'}, {firstName: 'Damon', lastName: 'Oehlman', company: 'Sidelab'}],
             customerdb = flatpack.use('customer');
 
+		function checkResults(results) {
+			// Check we have the correct results
+			expect(results.total_rows).to.equal(2);
+			expect(results.rows[0].value.firstName).to.equal('Nathan');
+			expect(results.rows[1].value.firstName).to.equal('Damon');
+		}
+
 		async.forEach(customers, function(customer, callback) {
 			customerdb.save(customer, callback);
 		}, function(err) {
 			if (err) return done(err);
-			var results = customerdb.findByType(function(err, results) {
+			customerdb.findByType(function(err, results) {
 				if (err) return done(err);
 				
-				// Check we have the correct results
-				expect(results.total_rows).to.equal(2);
-				expect(results.rows[0].value.firstName).to.equal('Nathan');
-				expect(results.rows[1].value.firstName).to.equal('Damon');
+				checkResults(results);
 				
-				// Delete the entries
-				async.forEach(results.rows, function(row, callback) {
-					customerdb.delete(row.value, callback);
-				}, function (err) {
-					done(err);
+				// Check alias
+				customerdb.all(function(err, results) {
+					if (err) return done(err);
+					checkResults(results);
+					
+					// Delete the entries
+					async.forEach(results.rows, function(row, callback) {
+						customerdb.delete(row.value, callback);
+					}, function (err) {
+						done(err);
+					});
+					
 				});
 			});
 		});

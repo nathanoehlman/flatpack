@@ -32,8 +32,8 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
                 // Create the accessor, with args as params
             } else {
 				var design = designName;
-                // Create the accessor
-                accessor['find' + _s.camelize('_' + viewName)] = function(done) {
+                // Create the default accessor
+                accessor['find' + _s.camelize('_' + viewName)] = accessor['all'] = function(done) {
                     var db = this._getDB();
                     this._getDB().get(designName + '/_view/' + dbView, null, done);
                 };
