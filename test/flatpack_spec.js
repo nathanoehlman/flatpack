@@ -1,7 +1,8 @@
 var expect = require('chai').expect,
     flatpack = require('../flatpack'),
     views = require('../lib/views'),
-    config = require('config');
+    config = require('config'),
+	async = require('async');
 
 describe('defining a flatpack model definition', function() {
     
@@ -49,5 +50,33 @@ describe('defining a flatpack model definition', function() {
             });
         });
     });
+
+	it('should be able to get all instances of the object by type', function(done) {
+		
+		var customers = [{firstName: 'Nathan', lastName: 'Oehlman', company: 'Sidelab'}, {firstName: 'Damon', lastName: 'Oehlman', company: 'Sidelab'}],
+            customerdb = flatpack.use('customer');
+
+		async.forEach(customers, function(customer, callback) {
+			customerdb.save(customer, callback);
+		}, function(err) {
+			if (err) return done(err);
+			var results = customerdb.findByType(function(err, results) {
+				if (err) return done(err);
+				
+				// Check we have the correct results
+				expect(results.total_rows).to.equal(2);
+				expect(results.rows[0].value.firstName).to.equal('Nathan');
+				expect(results.rows[1].value.firstName).to.equal('Damon');
+				
+				// Delete the entries
+				async.forEach(results.rows, function(row, callback) {
+					customerdb.delete(row.value, callback);
+				}, function (err) {
+					done(err);
+				});
+			});
+		});
+		
+	});
     
 });

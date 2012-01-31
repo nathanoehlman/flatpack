@@ -6,8 +6,8 @@ var expect = require('chai').expect,
 describe('views should be named, detected and created, and destroyed appropriately', function() {
     
     it('should name views correctly', function(done) {
-        expect(views._getViewName('client', ['type'])).to.equal('by_type');
-        expect(views._getViewName('client', ['firstName', 'lastName'])).to.equal('by_firstName_lastName');
+        expect(views._getViewName('client', ['type'])).to.equal('byType');
+        expect(views._getViewName('client', ['firstName', 'lastName'])).to.equal('byFirstNameLastName');
         done();
     });
     

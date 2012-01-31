@@ -4,6 +4,7 @@ var models = {},
     views = require('./lib/views')
     async = require('async'),
     _ = require('underscore'),
+	_s = require('underscore.string'),
     debug = require('debug')('flatpack');
 
 /**
@@ -30,10 +31,11 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
             if (attributes && attributes.length > 0) {
                 // Create the accessor, with args as params
             } else {
+				var design = designName;
                 // Create the accessor
-                accessor['find' + viewName] = function(id, done) {
+                accessor['find' + _s.camelize('_' + viewName)] = function(done) {
                     var db = this._getDB();
-                    db.get(designName + '/view/' + dbView, {key:id}, done);
+                    this._getDB().get(designName + '/_view/' + dbView, null, done);
                 };
                 
             }
