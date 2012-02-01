@@ -3,7 +3,7 @@
     "description": "Simple mapping library for CouchDB",
     "author": "Nathan Oehlman <nathan.oehlman@sidelab.com>",
     "tags": ["flatpack", "sidelab", "couch", "db"],
-    "version": "0.0.3",
+    "version": "0.1.1",
     
     "main": "flatpack.js",
     "engines": { "node": ">= 0.4.x < 0.7.0" },
