@@ -31,7 +31,7 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
 				view = designName + '/_view/' + dbView;
 			
             if (attributes && attributes.length > 0) {
-				accessor[funcName] = accessor[viewName] = function(opts, done) {
+				accessor[funcName] = function(opts, done) {
 				
 					var jsonified = {};
 					_.each(opts, function(value, key, list) {

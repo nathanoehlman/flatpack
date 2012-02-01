@@ -16,7 +16,7 @@ Flatpack provides some simple document modelling for CouchDB built on top of [su
     flatpack.define(couchurl, db, 'customer', null, callback);
 
     // Define a model with custom views
-    flatpack.define(couchurl, db, 'customer', {views: {byName: ['firstName', 'lastName']}}, callback);
+    flatpack.define(couchurl, db, 'customer', {views: {byName: ['firstName', 'lastName'], byCompany: ['company']}}, callback);
 ```
 
 ### Saving an object
@@ -51,4 +51,35 @@ Flatpack provides some simple document modelling for CouchDB built on top of [su
             });
         }
     });
+```
+
+### Using a view ###
+
+By default, flatpack will create a default view that can access all documents of the type.
+
+``` js
+	// Get all customer documents
+	var customerdb = flatpack.use('customer');
+	customerdb.findByType(function(err, results) {
+		// returns a CouchDB results
+		// ie. {total_rows: x, offset: x, rows: [documents]}
+	});
+	
+	// Can also be accessed using the all alias
+	customerdb.all(function(err, results) {
+		// etc
+	});
+	
+```
+
+Using a custom view is also very similar. 
+
+``` js
+	// Get all customer documents belonging to the Sidelab company
+	var customerdb = flatpack.use('customer');
+	// An argumented view takes an opts object, that gets converted into Couch DB view parameters (so you can use startKey, endKey, etc)
+	customerdb.findByCompany({key: 'Sidelab'}, function(err, results) {
+		// same as before - a CouchDB result set
+	});
+	
 ```
