@@ -14,7 +14,6 @@ var models = {},
   exposes those methods for easy use.
  **/
 exports.define = function(couchAdminUrl, db, model, options, callback) {
-
     if (!model || model.length == 0) return callback("Error: Invalid model name");
     
     // Get the views
@@ -28,14 +27,23 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
         views.createIfNotExists(couchAdminUrl, db, model, attributes, null, function(err, designName, dbView) {
             if (err) return callback(err)
             
+			var funcName = 'find' + _s.camelize('_' + viewName),
+				view = designName + '/_view/' + dbView;
+			
             if (attributes && attributes.length > 0) {
+				accessor[funcName] = accessor[viewName] = function(opts, done) {
+				
+					var jsonified = {};
+					_.each(opts, function(value, key, list) {
+						jsonified[key] = JSON.stringify(value);
+					});
+					this._getDB().get(view, jsonified, done);
+				};
                 // Create the accessor, with args as params
             } else {
-				var design = designName;
                 // Create the default accessor
-                accessor['find' + _s.camelize('_' + viewName)] = accessor['all'] = function(done) {
-                    var db = this._getDB();
-                    this._getDB().get(designName + '/_view/' + dbView, null, done);
+                accessor[funcName] = accessor['all'] = function(done) {
+					this._getDB().get(view, null, done);
                 };
                 
             }
@@ -44,7 +52,7 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
     }
     
     // Create all views
-    async.forEach(_.keys(modelViews), 
+    async.forEachSeries(_.keys(modelViews), 
                   function(key, callback) {
                      createView(key, modelViews[key], callback)
                   },

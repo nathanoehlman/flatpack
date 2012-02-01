@@ -1,4 +1,7 @@
 {
     "couchurl": "http://testmin:tester@localhost:5984",
-    "db": "mocha_tests"
+    "db": "flatpack_tests",
+	"admin": {
+		"couchurl": "http://testmin:tester@localhost:5984"
+	}
 }
