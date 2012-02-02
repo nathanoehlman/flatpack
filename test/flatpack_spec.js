@@ -107,7 +107,7 @@ describe('defining a flatpack model definition', function() {
         
         prepare(function(err) {
             if (err) return done(err);
-            customerdb.findByType(function(err, results) {
+            customerdb.findAll(function(err, results) {
                 if (err) return done(err);
                 expect(results.total_rows).to.equal(2);
                 expect(results.rows.length).to.equal(2);
