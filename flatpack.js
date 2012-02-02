@@ -4,7 +4,7 @@ var models = {},
     views = require('./lib/views')
     async = require('async'),
     _ = require('underscore'),
-	_s = require('underscore.string'),
+    _s = require('underscore.string'),
     debug = require('debug')('flatpack');
 
 /**
@@ -27,23 +27,23 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
         views.createIfNotExists(couchAdminUrl, db, model, attributes, null, function(err, designName, dbView) {
             if (err) return callback(err)
             
-			var funcName = 'find' + _s.camelize('_' + viewName),
-				view = designName + '/_view/' + dbView;
-			
+            var funcName = 'find' + _s.camelize('_' + viewName),
+                view = designName + '/_view/' + dbView;
+            
             if (attributes && attributes.length > 0) {
-				accessor[funcName] = function(opts, done) {
-				
-					var jsonified = {};
-					_.each(opts, function(value, key, list) {
-						jsonified[key] = JSON.stringify(value);
-					});
-					this._getDB().get(view, jsonified, done);
-				};
+                accessor[funcName] = function(opts, done) {
+                
+                    var jsonified = {};
+                    _.each(opts, function(value, key, list) {
+                        jsonified[key] = JSON.stringify(value);
+                    });
+                    this._getDB().get(view, jsonified, done);
+                };
                 // Create the accessor, with args as params
             } else {
                 // Create the default accessor
                 accessor[funcName] = accessor['all'] = function(done) {
-					this._getDB().get(view, null, done);
+                    this._getDB().get(view, null, done);
                 };
                 
             }
@@ -128,9 +128,9 @@ Accessorizer.prototype = {
      **/
     delete: function(object, callback) {
         if (!object) return callback();
-		var db = this._getDB();
-		// Delete the object using the revision of the current doc
-		db.del(object._id, {rev:object._rev}, callback);
+        var db = this._getDB();
+        // Delete the object using the revision of the current doc
+        db.del(object._id, {rev:object._rev}, callback);
     },
     
     /**
@@ -157,7 +157,7 @@ Accessorizer.prototype = {
       Returns a generated UUID from couch to use as the id
      **/
     _getUUID: function(callback) {
-        var db = supercomfy(config.couchurl);;      
+        var db = supercomfy(this.server);
         db.get('_uuids', null, callback);
     }
     
