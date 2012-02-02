@@ -9,16 +9,16 @@
     "engines": { "node": ">= 0.4.x < 0.7.0" },
         
     "dependencies": {
-		"async": "0.1.x",
-		"config": "0.4.x",
-		"debug": "*",
-		"supercomfy": ">= 0.0.2",
-		"underscore": "1.2.x",
-		"underscore.string": "2.0.0"
+        "async": "0.1.x",
+        "config": "0.4.x",
+        "debug": "*",
+        "supercomfy": ">= 0.0.2",
+        "underscore": "1.2.x",
+        "underscore.string": "2.0.0"
     },
     
     "devDependencies": {
-		"chai": "*"
+        "chai": "*"
     },
     "repository": {
         "type": "git",
