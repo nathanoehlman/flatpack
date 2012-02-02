@@ -136,4 +136,39 @@ describe('defining a flatpack model definition', function() {
         
     });
     
+    it('should be able to utilize asynchronous use', function(done) {
+       
+       // Define an invoice
+       flatpack.define(config.couchurl, config.db, 'invoice', function(err) {
+          if (err) done(err);
+       });
+       
+       // Use it when ready
+       flatpack.use('invoice', function(err, invoicesdb) {
+           if (err || !invoicesdb) return done(err);
+           var invoice = {customer: 'Sidelab', value: 150};
+           
+           // Save the invoice
+           invoicesdb.save(invoice, function(err, id) {
+              if (err) return done(err); 
+              
+              // Check it exists
+              invoicesdb.get(id, function(err, object) {
+                 if (err) return done(err);
+                 expect(object.customer).to.equal('Sidelab');
+                 expect(object.value).to.equal(150);
+                 done(); 
+              });
+           });
+       });
+        
+    });
+    
+    it('should get an error if attempting to use an undefined model', function(done) {
+       flatpack.use('spaceship', function(err, db) {
+          if (err) return done();
+          done('Expected error on define'); 
+       });
+    });
+    
 });

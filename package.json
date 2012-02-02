@@ -12,6 +12,7 @@
         "async": "0.1.x",
         "config": "0.4.x",
         "debug": "*",
+        "piper": ">= 0.1.1",
         "supercomfy": ">= 0.0.2",
         "underscore": "1.2.x",
         "underscore.string": "2.0.0"

@@ -4,7 +4,8 @@ var models = {},
     _ = require('underscore'),
     _s = require('underscore.string'),
     debug = require('debug')('flatpack'),
-    Accessorizer = require('./lib/accessorizer');
+    Accessorizer = require('./lib/accessorizer'),
+    pipe = require('piper')('flatpack');
 
 /**
   Defines a model, checking with the CouchDB database
@@ -23,7 +24,7 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
     
     // Get the views
     var modelViews = {all: []},
-        accessor = new Accessorizer(model, (options && options.couchUrl) ? options.couchUrl : couchAdminUrl, db);
+        accessor = models[model] = new Accessorizer(model, (options && options.couchUrl) ? options.couchUrl : couchAdminUrl, db);
         
     _.extend(modelViews, (options && options.views) ? options.views : {});
     
@@ -66,7 +67,8 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
                         // TODO: Maybe get rid of the model definition
                         return callback(err);
                      }
-                     models[model] = accessor;
+                     accessor.ready = true;
+                     pipe('defined.' + model, models[model]);
                      return callback(null, accessor);
                   });
 }
@@ -74,10 +76,33 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
 /**
   Returns a data accessor for the given model
  **/
-exports.use = function(model) {
+exports.use = function(model, callback) {
+    // Check if the model is being defined or is defined
     if (models && models[model]) {
-        return models[model];
+        var accessor = models[model];
+        
+        // Check the readiness of the model
+        if (accessor.ready) {
+            if (callback) {
+                callback(null, accessor);
+            } 
+            return accessor;
+        } else {
+            // Not ready
+            if (callback) {
+                pipe.once('defined.' + model, function(accessor) {
+                    callback(null, accessor);
+                });
+            }
+            debug('Model [' + model + '] not yet available for use.');
+            return null;
+        }
     }
+    
+    // Not defined, so nothing we can do
     debug('Model [' + model + '] not defined. Define with flatpack.define() first');
+    if (callback) {
+        callback('Error: ' + model + ' not defined');
+    }
     return null;
 }
