@@ -58,7 +58,7 @@ describe('defining a flatpack model definition', function() {
     // Start tests
     it('should define and create a model with a default view', function(done) {
     
-        flatpack.define(config.couchurl, config.db, 'customer', null, function(err) {
+        flatpack.define(config.couchurl, config.db, 'customer', function(err) {
             if (err) return done(err);
             views.exists(config.couchurl, config.db, 'customer', null, function(err, exists) {
                 if (err || !exists) return done(err);
