@@ -22,7 +22,7 @@ exports.define = function(couchAdminUrl, db, model, options, callback) {
     }
     
     // Get the views
-    var modelViews = {byType: []},
+    var modelViews = {all: []},
         accessor = new Accessorizer(model, (options && options.couchUrl) ? options.couchUrl : couchAdminUrl, db);
         
     _.extend(modelViews, (options && options.views) ? options.views : {});
